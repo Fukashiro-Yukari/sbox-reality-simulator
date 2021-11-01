@@ -10,7 +10,6 @@ partial class Ragdoll : AnimEntity
 
 	public Ragdoll() : base()
 	{
-		Health = 1;
 	}
 
 	public Ragdoll( RealityPlayer player ) : base()
@@ -42,6 +41,7 @@ partial class Ragdoll : AnimEntity
 		if ( isDeath )
 		{
 			player.Ragdoll = null;
+			player = null;
 
 			return;
 		}
@@ -62,11 +62,19 @@ partial class Ragdoll : AnimEntity
 		if ( !player.IsValid() ) return;
 
 		player.Ragdoll = null;
+		player = null;
+	}
+
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		Health = 1;
 	}
 
 	public override void TakeDamage( DamageInfo info )
 	{
-		player.TakeDamage( info );
+		player?.TakeDamage( info );
 	}
 
 	public override void OnKilled()
