@@ -62,6 +62,7 @@ partial class RealityPlayer : Player
 		Inventory.Add( Library.Create<Weapon>( weps[Rand.Int( 0, weps.Length - 1 )] ) );
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new Fists() );
+		Inventory.Add( new Flashlight() );
 
 		base.Respawn();
 	}
