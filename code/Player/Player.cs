@@ -57,9 +57,9 @@ partial class RealityPlayer : Player
 
 		Clothing.DressEntity( this );
 
-		Entity[] entities = { new Crossbow(), new PumpShotgun(), new SMG() };
+		string[] weps = { "weapon_crossbow", "weapon_pumpshotgun", "weapon_smg" };
 
-		Inventory.Add( entities[Rand.Int( 0, entities.Length - 1 )] );
+		Inventory.Add( Library.Create<Weapon>( weps[Rand.Int( 0, weps.Length - 1 )] ) );
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new Fists() );
 
