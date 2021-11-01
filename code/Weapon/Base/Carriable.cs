@@ -63,19 +63,6 @@ public partial class Carriable : BaseCarriable, IUse
 
 	public override void CreateViewModel()
 	{
-		Host.AssertClient();
-
-		if ( string.IsNullOrEmpty( ViewModelPath ) )
-			return;
-
-		ViewModelEntity = new ViewModel
-		{
-			Position = Position,
-			Owner = Owner,
-			EnableViewmodelRendering = true
-		};
-
-		ViewModelEntity.SetModel( ViewModelPath );
 	}
 
 	public virtual bool OnUse( Entity user )

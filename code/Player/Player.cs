@@ -163,23 +163,26 @@ partial class RealityPlayer : Player
 		if ( controller != null )
 			EnableSolidCollisions = !controller.HasTag( "noclip" );
 
-		TickPlayerUse();
-		SimulateActiveChild( cl, ActiveChild );
-
-		if ( Input.Pressed( InputButton.View ) )
-			BecomeRagdoll( Velocity );
-
-		Camera = GetActiveCamera();
-
-		if ( Input.Pressed( InputButton.Drop ) )
+		if (Ragdoll == null )
 		{
-			var dropped = Inventory.DropActive();
-			if ( dropped != null )
-			{
-				dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRot.Forward * 80.0f + Vector3.Up * 100.0f, true );
-				dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
+			TickPlayerUse();
+			SimulateActiveChild( cl, ActiveChild );
 
-				timeSinceDropped = 0;
+			if ( Input.Pressed( InputButton.View ) )
+				BecomeRagdoll( Velocity );
+
+			Camera = GetActiveCamera();
+
+			if ( Input.Pressed( InputButton.Drop ) )
+			{
+				var dropped = Inventory.DropActive();
+				if ( dropped != null )
+				{
+					dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRot.Forward * 80.0f + Vector3.Up * 100.0f, true );
+					dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
+
+					timeSinceDropped = 0;
+				}
 			}
 		}
 
