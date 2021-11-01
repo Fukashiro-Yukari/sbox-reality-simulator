@@ -59,7 +59,7 @@ partial class RealityPlayer : Player
 
 		string[] weps = { "weapon_crossbow", "weapon_pumpshotgun", "weapon_smg" };
 
-		Inventory.Add( Library.Create<Weapon>( weps[Rand.Int( 0, weps.Length - 1 )] ) );
+		Inventory.Add( Library.Create<Weapon>( weps[Rand.Int( 0, weps.Length - 1 )] ), true );
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new Fists() );
 		Inventory.Add( new Flashlight() );
