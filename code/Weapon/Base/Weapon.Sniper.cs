@@ -72,7 +72,7 @@ public partial class WeaponSniper : Weapon
 	{
 		if ( IsLocalPawn )
 		{
-			ViewModelEntity.RenderColor = ViewModelEntity.RenderColor.WithAlpha( 0f );
+			//ViewModelEntity.RenderColor = ViewModelEntity.RenderColor.WithAlpha( 0f );
 
 			if ( !string.IsNullOrEmpty( ZoomInSound ) )
 				PlaySound( ZoomInSound );
@@ -85,7 +85,7 @@ public partial class WeaponSniper : Weapon
 
 		if ( IsLocalPawn )
 		{
-			ViewModelEntity.RenderColor = ViewModelEntity.RenderColor.WithAlpha( 1f );
+			//ViewModelEntity.RenderColor = ViewModelEntity.RenderColor.WithAlpha( 1f );
 
 			if ( !string.IsNullOrEmpty( ZoomOutSound ) )
 				PlaySound( ZoomOutSound );
