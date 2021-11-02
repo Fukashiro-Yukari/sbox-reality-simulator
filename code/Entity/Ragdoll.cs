@@ -54,7 +54,7 @@ partial class Ragdoll : AnimEntity
 	public void FallingSound()
 	{
 		if ( !IsValidPlayer() ) return;
-		if ( timeSinceScream < 3 || isDeath ) return;
+		if ( timeSinceScream < 10 || isDeath ) return;
 		timeSinceScream = 0;
 
 		if ( player.IsValid() )
