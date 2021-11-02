@@ -131,7 +131,7 @@ partial class Ragdoll : AnimEntity
 	{
 		base.OnPhysicsCollision( eventData );
 
-		if ( eventData.Entity is RealityPlayer ply && ply.Velocity.Length > 100 )
+		if ( eventData.Entity is RealityPlayer ply && Velocity.Length > 100 )
 			ply.BecomeRagdoll( eventData.PreVelocity );
 
 		if ( !IsValidPlayer() ) return;
@@ -163,7 +163,7 @@ partial class Ragdoll : AnimEntity
 		if ( speed > 300 && player.LifeState == LifeState.Alive && !isDeath )
 			PainSound();
 
-		if ( Velocity.Length < 10 )
+		if ( Velocity.Length < 20 )
 			_ = BecomePlayer();
 	}
 

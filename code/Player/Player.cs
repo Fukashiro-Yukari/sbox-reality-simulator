@@ -194,9 +194,10 @@ partial class RealityPlayer : Player
 		if ( controller != null && !controller.HasTag( "noclip" ) )
 		{
 			List<Vector3> vecs = new() { Rotation.Forward, Rotation.Backward, Rotation.Left, Rotation.Right };
-			var dist = 20f;
+			var dist = 22f;
+			var len = 250f;
 
-			foreach (var vec in vecs )
+			foreach ( var vec in vecs )
 			{
 				var startpos = Position + Vector3.Up * 3;
 				var endpos = startpos + vec * dist;
@@ -208,9 +209,10 @@ partial class RealityPlayer : Player
 					.HitLayer( CollisionLayer.All, false )
 					.HitLayer( CollisionLayer.STATIC_LEVEL )
 					.HitLayer( CollisionLayer.Solid )
+					.HitLayer( CollisionLayer.Hitbox )
 					.Run();
 
-				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > 300 )
+				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > len )
 					BecomeRagdoll( Velocity );
 			}
 
@@ -226,14 +228,15 @@ partial class RealityPlayer : Player
 					.HitLayer( CollisionLayer.All, false )
 					.HitLayer( CollisionLayer.STATIC_LEVEL )
 					.HitLayer( CollisionLayer.Solid )
+					.HitLayer( CollisionLayer.Hitbox )
 					.Run();
 
-				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > 300 )
+				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > len )
 					BecomeRagdoll( Velocity );
 			}
-
-			//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 		}
+
+		//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 	}
 
 	public void ResetDroppedTime()
@@ -243,6 +246,12 @@ partial class RealityPlayer : Player
 
 	public override void StartTouch( Entity other )
 	{
+		var controller = GetActiveController();
+		var downVel = Velocity * Vector3.Down;
+
+		if ( other is not Weapon && controller != null && !controller.HasTag( "noclip" ) && controller.GroundEntity == null && Velocity.Length > 250 && downVel.z < 135 )
+			BecomeRagdoll( Velocity );
+
 		if ( timeSinceDropped < 1 ) return;
 
 		base.StartTouch( other );
