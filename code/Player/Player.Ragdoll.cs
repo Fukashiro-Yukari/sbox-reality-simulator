@@ -27,7 +27,12 @@ partial class RealityPlayer
 		Ragdoll.Delete();
 	}
 
-	private void BecomeRagdoll( Vector3 velocity, DamageFlags damageFlags = default, Vector3 forcePos = default, Vector3 force = default, int bone = -1 )
+	public void BecomeRagdoll( Vector3 velocity, bool playsound )
+	{
+		BecomeRagdoll( velocity, default, default, default, -1, playsound );
+	}
+
+	public void BecomeRagdoll( Vector3 velocity, DamageFlags damageFlags = default, Vector3 forcePos = default, Vector3 force = default, int bone = -1, bool playsound = false )
 	{
 		if ( !IsServer || Ragdoll != null ) return;
 
@@ -103,5 +108,8 @@ partial class RealityPlayer
 		}
 
 		Ragdoll = ent;
+
+		if ( playsound )
+			Ragdoll.PainSound();
 	}
 }

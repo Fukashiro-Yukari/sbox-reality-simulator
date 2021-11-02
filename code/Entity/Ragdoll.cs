@@ -6,7 +6,9 @@ partial class Ragdoll : AnimEntity
 	RealityPlayer player;
 	bool isBecome;
 	bool isDeath;
+	bool hasPlayDeathSound;
 	TimeSince timeSinceTakeDamage;
+	TimeSince timeSinceScream;
 
 	public Ragdoll() : base()
 	{
@@ -22,11 +24,52 @@ partial class Ragdoll : AnimEntity
 		this.player = player;
 	}
 
+	public bool IsValidPlayer()
+	{
+		return player.IsValid();
+	}
+
+	public void PainSound()
+	{
+		if ( !IsValidPlayer() ) return;
+		if ( timeSinceScream < 0.8 || player.LifeState != LifeState.Alive || isDeath ) return;
+		timeSinceScream = 0;
+
+		if ( player.IsValid() )
+			player.Position = Position;
+
+		PlaySound( $"pain-{Rand.Int( 1, 10 )}" );
+	}
+
+	public void DeathSound()
+	{
+		if ( !IsValidPlayer() ) return;
+		if ( isDeath ) return;
+		if ( player.IsValid() )
+			player.Position = Position;
+
+		PlaySound( $"death-{Rand.Int( 1, 4 )}" );
+	}
+
+	public void FallingSound()
+	{
+		if ( !IsValidPlayer() ) return;
+		if ( timeSinceScream < 3 || isDeath ) return;
+		timeSinceScream = 0;
+
+		if ( player.IsValid() )
+			player.Position = Position;
+
+		PlaySound( $"falling-{Rand.Int( 1, 4 )}" );
+	}
+
 	async Task BecomePlayer()
 	{
-		if ( isDeath || !player.IsValid() ) return;
+		if ( isDeath || !IsValidPlayer() ) return;
 		if ( player.LifeState != LifeState.Alive )
 		{
+			DeathSound();
+
 			isDeath = true;
 
 			_ = DeleteAsync( 120f );
@@ -51,7 +94,9 @@ partial class Ragdoll : AnimEntity
 
 	async Task PlayerDeath()
 	{
-		if ( isDeath || !player.IsValid() ) return;
+		if ( isDeath || !IsValidPlayer() ) return;
+
+		DeathSound();
 
 		isDeath = true;
 
@@ -59,7 +104,7 @@ partial class Ragdoll : AnimEntity
 
 		await GameTask.DelaySeconds( 3f );
 
-		if ( !player.IsValid() ) return;
+		if ( !IsValidPlayer() ) return;
 
 		player.Ragdoll = null;
 		player = null;
@@ -75,6 +120,7 @@ partial class Ragdoll : AnimEntity
 	public override void TakeDamage( DamageInfo info )
 	{
 		player?.TakeDamage( info );
+		PainSound();
 	}
 
 	public override void OnKilled()
@@ -85,7 +131,10 @@ partial class Ragdoll : AnimEntity
 	{
 		base.OnPhysicsCollision( eventData );
 
-		if ( !player.IsValid() ) return;
+		if ( eventData.Entity is RealityPlayer ply && ply.Velocity.Length > 100 )
+			ply.BecomeRagdoll( eventData.PreVelocity );
+
+		if ( !IsValidPlayer() ) return;
 		if ( player.LifeState != LifeState.Alive )
 		{
 			_ = PlayerDeath();
@@ -111,6 +160,9 @@ partial class Ragdoll : AnimEntity
 			player.TakeDamage( damage );
 		}
 
+		if ( speed > 300 && player.LifeState == LifeState.Alive && !isDeath )
+			PainSound();
+
 		if ( Velocity.Length < 10 )
 			_ = BecomePlayer();
 	}
@@ -118,11 +170,14 @@ partial class Ragdoll : AnimEntity
 	[Event.Tick.Server]
 	private void Tick()
 	{
-		if ( !player.IsValid() ) return;
+		if ( !IsValidPlayer() ) return;
 		if ( WaterLevel.Entity != null )
 			_ = BecomePlayer();
 
 		if ( player.LifeState != LifeState.Alive )
 			_ = PlayerDeath();
+
+		if ( Velocity.Length > 800 )
+			FallingSound();
 	}
 }

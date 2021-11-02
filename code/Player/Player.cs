@@ -107,7 +107,7 @@ partial class RealityPlayer : Player
 		base.TakeDamage( info );
 
 		if ( info.Flags != DamageFlags.Fall )
-			BecomeRagdoll( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
+			BecomeRagdoll( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ), true );
 	}
 
 	public override PawnController GetActiveController()
@@ -165,7 +165,7 @@ partial class RealityPlayer : Player
 		if ( controller != null )
 			EnableSolidCollisions = !controller.HasTag( "noclip" );
 
-		if (Ragdoll == null )
+		if ( Ragdoll == null )
 		{
 			TickPlayerUse();
 			SimulateActiveChild( cl, ActiveChild );
@@ -188,19 +188,18 @@ partial class RealityPlayer : Player
 			}
 		}
 
-		var DownVel = Velocity * Rotation.Down;
-
-		if ( DownVel.z > 400 && controller != null && !controller.HasTag( "noclip" ) && Ragdoll == null )
+		if ( Velocity.Length > 500 && controller != null && !controller.HasTag( "noclip" ) && Ragdoll == null )
 			BecomeRagdoll( Velocity );
 
 		if ( controller != null && !controller.HasTag( "noclip" ) )
 		{
 			List<Vector3> vecs = new() { Rotation.Forward, Rotation.Backward, Rotation.Left, Rotation.Right };
+			var dist = 20f;
 
 			foreach (var vec in vecs )
 			{
 				var startpos = Position + Vector3.Up * 3;
-				var endpos = startpos + vec * 30;
+				var endpos = startpos + vec * dist;
 
 				//DebugOverlay.Line( startpos, endpos );
 
@@ -215,7 +214,25 @@ partial class RealityPlayer : Player
 					BecomeRagdoll( Velocity );
 			}
 
-			//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
+			foreach ( var vec in vecs )
+			{
+				var startpos = EyePos;
+				var endpos = startpos + vec * dist;
+
+				//DebugOverlay.Line( startpos, endpos );
+
+				var tr = Trace.Ray( startpos, endpos )
+					.Ignore( this )
+					.HitLayer( CollisionLayer.All, false )
+					.HitLayer( CollisionLayer.STATIC_LEVEL )
+					.HitLayer( CollisionLayer.Solid )
+					.Run();
+
+				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > 300 )
+					BecomeRagdoll( Velocity );
+			}
+
+			DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 		}
 	}
 
