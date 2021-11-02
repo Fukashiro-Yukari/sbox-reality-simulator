@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
 
 partial class RealityPlayer : Player
 {
@@ -189,25 +190,30 @@ partial class RealityPlayer : Player
 
 		var DownVel = Velocity * Rotation.Down;
 
-		if ( DownVel.z > 350 && controller != null && !controller.HasTag( "noclip" ) && Ragdoll == null )
+		if ( DownVel.z > 400 && controller != null && !controller.HasTag( "noclip" ) && Ragdoll == null )
 			BecomeRagdoll( Velocity );
 
 		if ( controller != null && !controller.HasTag( "noclip" ) )
 		{
-			var startpos = Position + Vector3.Up * 4;
-			var endpos = startpos + Rotation.Forward * 30;
+			List<Vector3> vecs = new() { Rotation.Forward, Rotation.Backward, Rotation.Left, Rotation.Right };
 
-			//DebugOverlay.Line( startpos, endpos );
+			foreach (var vec in vecs )
+			{
+				var startpos = Position + Vector3.Up * 3;
+				var endpos = startpos + vec * 30;
 
-			var tr = Trace.Ray( startpos, endpos )
-				.Ignore( this )
-				.HitLayer( CollisionLayer.All, false )
-				.HitLayer( CollisionLayer.STATIC_LEVEL )
-				.HitLayer( CollisionLayer.Solid )
-				.Run();
+				//DebugOverlay.Line( startpos, endpos );
 
-			if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > 300 )
-				BecomeRagdoll( Velocity );
+				var tr = Trace.Ray( startpos, endpos )
+					.Ignore( this )
+					.HitLayer( CollisionLayer.All, false )
+					.HitLayer( CollisionLayer.STATIC_LEVEL )
+					.HitLayer( CollisionLayer.Solid )
+					.Run();
+
+				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > 300 )
+					BecomeRagdoll( Velocity );
+			}
 
 			//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 		}
