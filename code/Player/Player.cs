@@ -232,7 +232,7 @@ partial class RealityPlayer : Player
 					BecomeRagdoll( Velocity );
 			}
 
-			DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
+			//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 		}
 	}
 
