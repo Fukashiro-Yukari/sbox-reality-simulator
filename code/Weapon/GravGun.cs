@@ -17,7 +17,7 @@ public partial class GravGun : Carriable
 	public Rotation HeldRot { get; private set; }
 	public ModelEntity HeldEntity { get; private set; }
 
-	public override int Bucket => 0;
+	public override int Bucket => 3;
 	public override string Icon => "ui/weapons/weapon_pistol.png";
 
 	protected virtual float MaxPullDistance => 2000.0f;
