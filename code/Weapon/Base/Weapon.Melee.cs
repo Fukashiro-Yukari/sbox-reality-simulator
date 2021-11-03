@@ -76,7 +76,7 @@ public partial class WeaponMelee : Weapon
 				tr.Surface.DoBulletImpactServer( tr );
 
 			hit = true;
-			var isFlesh = tr.Entity is Player;
+			var isFlesh = tr.Entity is Player || tr.Entity is Ragdoll;
 			var newRot = Rotation.From( 0, Rotation.Angles().yaw, 0 );
 			var trenewRot = Rotation.From( 0, tr.Entity.Rotation.Angles().yaw, 0 );
 			var dif = newRot.Distance( trenewRot );

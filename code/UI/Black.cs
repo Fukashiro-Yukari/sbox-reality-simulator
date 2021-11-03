@@ -18,11 +18,11 @@ public partial class Black : Panel
 
 		if ( pawn == null ) return;
 
-		var aliceColor = new Color( 1, 0, 0, (1f - (pawn.Health / 100f)) * 0.95f );
+		var aliveColor = new Color( 1, 0, 0, (1f - (pawn.Health / 100f)) * 0.4f );
 		var deathColor = new Color( 0, 0, 0 );
 
 		if ( pawn.LifeState == LifeState.Alive )
-			Style.BackgroundColor = aliceColor;
+			Style.BackgroundColor = aliveColor;
 		else
 			Style.BackgroundColor = deathColor;
 

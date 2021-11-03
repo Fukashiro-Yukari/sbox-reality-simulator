@@ -5,7 +5,7 @@ partial class Fists : WeaponMelee
 {
 	public override string ViewModelPath => "models/firstperson/temp_punch/temp_punch.vmdl";
 
-	public override int Bucket => 2;
+	public override int Bucket => 3;
 	public override float PrimarySpeed => 0.5f;
 	public override float SecondarySpeed => 0.5f;
 	public override float PrimaryDamage => 25f;

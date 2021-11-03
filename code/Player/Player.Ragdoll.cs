@@ -27,6 +27,11 @@ partial class RealityPlayer
 		Ragdoll.Delete();
 	}
 
+	public void BecomeRagdoll()
+	{
+		BecomeRagdoll( Velocity );
+	}
+
 	public void BecomeRagdoll( Vector3 velocity, bool playsound )
 	{
 		BecomeRagdoll( velocity, default, default, default, -1, playsound );
@@ -40,6 +45,9 @@ partial class RealityPlayer
 		Controller = null;
 		EnableAllCollisions = false;
 		EnableDrawing = false;
+
+		if ( Vehicle.IsValid() )
+			velocity += Vehicle.Velocity * Vector3.Up * 5000;
 
 		if ( forcePos.IsNaN )
 			forcePos = Position;

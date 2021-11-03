@@ -15,7 +15,6 @@ public partial class WeaponSniper : Weapon
 	[Net, Predicted]
 	public int ZoomLevel { get; set; } = -1;
 
-	private Panel SniperScopePanel;
 	private float lerpZoomAmount = 0;
 
 	public override void ActiveEnd( Entity ent, bool dropped )
@@ -24,7 +23,6 @@ public partial class WeaponSniper : Weapon
 
 		ZoomLevel = -1;
 		lerpZoomAmount = 0;
-		SniperScopePanel?.Delete();
 	}
 
 	public override bool CanSecondaryAttack()

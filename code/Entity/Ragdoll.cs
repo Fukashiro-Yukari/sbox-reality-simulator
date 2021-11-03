@@ -6,7 +6,6 @@ partial class Ragdoll : AnimEntity
 	RealityPlayer player;
 	bool isBecome;
 	bool isDeath;
-	bool hasPlayDeathSound;
 	TimeSince timeSinceTakeDamage;
 	TimeSince timeSinceScream;
 
@@ -119,7 +118,9 @@ partial class Ragdoll : AnimEntity
 
 	public override void TakeDamage( DamageInfo info )
 	{
-		player?.TakeDamage( info );
+		if ( player.IsValid() )
+			player.TakeDamage( info );
+
 		PainSound();
 	}
 

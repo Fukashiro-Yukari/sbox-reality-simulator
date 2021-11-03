@@ -10,12 +10,11 @@ partial class RealityPlayer : Player
 	[Net] public PawnController VehicleController { get; set; }
 	[Net] public PawnAnimator VehicleAnimator { get; set; }
 	[Net] public Ragdoll Ragdoll { get; set; }
-	[Net, Predicted] public ICamera VehicleCamera { get; set; }
 	[Net, Predicted] public Entity Vehicle { get; set; }
-	[Net, Predicted] public ICamera MainCamera { get; set; }
 
 	public ICamera LastCamera { get; set; }
 	public Clothing.Container Clothing = new();
+	public Vector3 RespawnPoint { get; set; }
 
 	public RealityPlayer()
 	{
@@ -28,14 +27,6 @@ partial class RealityPlayer : Player
 		Clothing.LoadFromClient( cl );
 	}
 
-	public override void Spawn()
-	{
-		MainCamera = new RealityCamera();
-		LastCamera = MainCamera;
-
-		base.Spawn();
-	}
-
 	public override void Respawn()
 	{
 		SetModel( "models/citizen/citizen.vmdl" );
@@ -43,8 +34,7 @@ partial class RealityPlayer : Player
 		Controller = new WalkController();
 		Animator = new StandardPlayerAnimator();
 
-		MainCamera = LastCamera;
-		Camera = MainCamera;
+		Camera = new RealityCamera();
 
 		if ( DevController is NoclipController )
 		{
@@ -58,11 +48,7 @@ partial class RealityPlayer : Player
 
 		Clothing.DressEntity( this );
 
-		string[] weps = { "weapon_crossbow", "weapon_pumpshotgun", "weapon_smg" };
-
-		Inventory.Add( Library.Create<Weapon>( weps[Rand.Int( 0, weps.Length - 1 )] ), true );
-		Inventory.Add( new Pistol() );
-		Inventory.Add( new Fists() );
+		Inventory.Add( new Fists(), true );
 		Inventory.Add( new Flashlight() );
 
 		base.Respawn();
@@ -84,7 +70,6 @@ partial class RealityPlayer : Player
 
 		VehicleController = null;
 		VehicleAnimator = null;
-		VehicleCamera = null;
 		Vehicle = null;
 
 		BecomeRagdoll( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
@@ -123,13 +108,6 @@ partial class RealityPlayer : Player
 		if ( VehicleAnimator != null ) return VehicleAnimator;
 
 		return base.GetActiveAnimator();
-	}
-
-	public ICamera GetActiveCamera()
-	{
-		if ( VehicleCamera != null ) return VehicleCamera;
-
-		return MainCamera;
 	}
 
 	string oldavatar = ConsoleSystem.GetValue( "avatar" );
@@ -171,9 +149,7 @@ partial class RealityPlayer : Player
 			SimulateActiveChild( cl, ActiveChild );
 
 			if ( Input.Pressed( InputButton.View ) )
-				BecomeRagdoll( Velocity );
-
-			Camera = GetActiveCamera();
+				BecomeRagdoll();
 
 			if ( Input.Pressed( InputButton.Drop ) )
 			{
@@ -189,7 +165,7 @@ partial class RealityPlayer : Player
 		}
 
 		if ( Velocity.Length > 500 && controller != null && !controller.HasTag( "noclip" ) && Ragdoll == null )
-			BecomeRagdoll( Velocity );
+			BecomeRagdoll();
 
 		if ( controller != null && !controller.HasTag( "noclip" ) )
 		{
@@ -202,18 +178,16 @@ partial class RealityPlayer : Player
 				var startpos = Position + Vector3.Up * 3;
 				var endpos = startpos + vec * dist;
 
-				//DebugOverlay.Line( startpos, endpos );
-
 				var tr = Trace.Ray( startpos, endpos )
+					.UseHitboxes()
 					.Ignore( this )
-					.HitLayer( CollisionLayer.All, false )
-					.HitLayer( CollisionLayer.STATIC_LEVEL )
-					.HitLayer( CollisionLayer.Solid )
-					.HitLayer( CollisionLayer.Hitbox )
+					.Size( 5 )
 					.Run();
 
+				//DebugOverlay.TraceResult( tr );
+
 				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > len )
-					BecomeRagdoll( Velocity );
+					BecomeRagdoll();
 			}
 
 			foreach ( var vec in vecs )
@@ -221,18 +195,16 @@ partial class RealityPlayer : Player
 				var startpos = EyePos;
 				var endpos = startpos + vec * dist;
 
-				//DebugOverlay.Line( startpos, endpos );
-
 				var tr = Trace.Ray( startpos, endpos )
+					.UseHitboxes()
 					.Ignore( this )
-					.HitLayer( CollisionLayer.All, false )
-					.HitLayer( CollisionLayer.STATIC_LEVEL )
-					.HitLayer( CollisionLayer.Solid )
-					.HitLayer( CollisionLayer.Hitbox )
+					.Size( 5 )
 					.Run();
 
+				//DebugOverlay.TraceResult( tr );
+
 				if ( tr.Hit && controller.GroundEntity == null && Velocity.Length > len )
-					BecomeRagdoll( Velocity );
+					BecomeRagdoll();
 			}
 		}
 
@@ -250,7 +222,7 @@ partial class RealityPlayer : Player
 		var downVel = Velocity * Vector3.Down;
 
 		if ( other is not Weapon && controller != null && !controller.HasTag( "noclip" ) && controller.GroundEntity == null && Velocity.Length > 250 && downVel.z < 135 )
-			BecomeRagdoll( Velocity );
+			BecomeRagdoll();
 
 		if ( timeSinceDropped < 1 ) return;
 
@@ -281,6 +253,19 @@ partial class RealityPlayer : Player
 			break;
 		}
 	}
+
+	//[Event("render.postprocess")]
+	//public static void DrawPostProcess()
+	//{
+		//Render.BlendMode = BlendMode.AlphaBlend;
+
+		//Render.CopyFrameBuffer();
+
+		//Render.Material = Material.Load( "postprocess/standard.vpost" );
+		//Render.DrawScreenQuad();
+
+		//Render.Compute.Using
+	//}
 
 	// TODO
 

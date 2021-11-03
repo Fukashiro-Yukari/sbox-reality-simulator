@@ -16,5 +16,6 @@ public partial class RealityHud : HudEntity<RootPanel>
 		RootPanel.AddChild<VoiceList>();
 		RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
 		RootPanel.AddChild<InventoryBar>();
+		RootPanel.AddChild<SpawnMenu>();
 	}
 }
