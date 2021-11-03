@@ -171,6 +171,16 @@
 ]
 
 //
+// GravGun
+//
+@PointClass base(BaseProperties_reality_simulator) = weapon_gravgun : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
 // HL2Pistol
 //
 @PointClass base(BaseProperties_reality_simulator) editormodel( "weapons/hl2_pistol/w_hl2_pistol.vmdl" ) = weapon_hl2_pistol : ""

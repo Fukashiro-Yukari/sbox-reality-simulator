@@ -34,7 +34,7 @@ public partial class WeaponList : Panel
 		if ( isreload )
 			Canvas.Data.Clear();
 
-		var ents = Library.GetAllAttributes<Weapon>().Where( x => x.Spawnable ).OrderBy( x => x.Title ).ToArray();
+		var ents = Library.GetAllAttributes<Carriable>().Where( x => x.Spawnable ).OrderBy( x => x.Title ).ToArray();
 
 		foreach ( var entry in ents )
 		{

@@ -31,7 +31,7 @@ partial class Ragdoll : AnimEntity
 	public void PainSound()
 	{
 		if ( !IsValidPlayer() ) return;
-		if ( timeSinceScream < 0.8 || player.LifeState != LifeState.Alive || isDeath ) return;
+		if ( timeSinceScream < 1.5 || player.LifeState != LifeState.Alive || isDeath ) return;
 		timeSinceScream = 0;
 
 		if ( player.IsValid() )
