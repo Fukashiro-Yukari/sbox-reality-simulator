@@ -6,7 +6,9 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": null,
+  "ResourcePaths": [
+    "/entity/*"
+  ],
   "HasCode": true,
   "CodePath": "code",
   "RootNamespace": "Sandbox",
