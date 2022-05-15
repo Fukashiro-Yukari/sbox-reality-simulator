@@ -84,6 +84,8 @@ public partial class CarEntity : Prop, IUse
 	{
 		base.Spawn();
 
+		Components.Create<RealityCamera>();
+
 		SetModel(CarModel);
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 		SetInteractsExclude( CollisionLayer.Player );

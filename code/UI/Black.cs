@@ -17,6 +17,8 @@ public partial class Black : Panel
 		var pawn = Local.Pawn;
 
 		if ( pawn == null ) return;
+		if ( pawn is CarEntity car )
+			pawn = car.Driver;
 
 		var aliveColor = new Color( 1, 0, 0, (1f - (pawn.Health / 100f)) * 0.4f );
 		var deathColor = new Color( 0, 0, 0 );
@@ -25,7 +27,5 @@ public partial class Black : Panel
 			Style.BackgroundColor = aliveColor;
 		else
 			Style.BackgroundColor = deathColor;
-
-		Style.Dirty();
 	}
 }

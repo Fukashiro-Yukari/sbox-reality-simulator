@@ -21,7 +21,10 @@ public class RealityCamera : CameraMode
 	public override void Update()
 	{
 		var pawn = Local.Pawn;
+
 		if ( pawn == null ) return;
+		if ( pawn is CarEntity car )
+			pawn = car.Driver;
 
 		var player = pawn as RealityPlayer;
 		var entity = pawn as ModelEntity;
