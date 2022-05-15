@@ -527,9 +527,6 @@ public partial class Weapon : Carriable, IUse
 				{
 					dropped.PhysicsGroup.ApplyImpulse( user.Velocity + user.EyeRotation.Forward * 80.0f + Vector3.Up * 100.0f, true );
 					dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
-
-					if ( user is RealityPlayer player )
-						player.ResetDroppedTime();
 				}
 
 				return false;
@@ -621,13 +618,13 @@ public partial class Weapon : Carriable, IUse
 	[ClientRpc]
 	protected virtual void BulletTracer( Vector3 to )
 	{
-		//var tr = EffectEntity.GetAttachment( "muzzle" );
+		var tr = EffectEntity.GetAttachment( "muzzle" );
 
-		//if ( tr == null ) return;
+		if ( tr == null ) return;
 
-		//var ps = Particles.Create( "particles/sd_bullet_trail.vpcf", to );
-		//ps.SetPosition( 0, tr.Value.Position );
-		//ps.SetPosition( 1, to );
+		var ps = Particles.Create( "particles/swb/tracer/tracer_large.vpcf", to );
+		ps.SetPosition( 1, tr.GetValueOrDefault().Position );
+		ps.SetPosition( 2, to );
 	}
 
 	/// <summary>

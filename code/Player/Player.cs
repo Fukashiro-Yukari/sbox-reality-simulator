@@ -190,11 +190,6 @@ partial class RealityPlayer : Player
 		//DebugOverlay.ScreenText( new Vector2( 200, 250 ), $"{Health} | {Velocity.Length}" );
 	}
 
-	public void ResetDroppedTime()
-	{
-		timeSinceDropped = 0;
-	}
-
 	public override void StartTouch( Entity other )
 	{
 		var controller = GetActiveController();
@@ -203,7 +198,7 @@ partial class RealityPlayer : Player
 		if ( other is not Weapon && controller != null && !controller.HasTag( "noclip" ) && controller.GroundEntity == null && Velocity.Length > 250 && downVel.z < 135 )
 			BecomeRagdoll();
 
-		if ( timeSinceDropped < 1 ) return;
+		if ( timeSinceDropped < 0.1 ) return;
 
 		base.StartTouch( other );
 	}
