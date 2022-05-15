@@ -29,23 +29,7 @@ partial class Fists : WeaponMelee
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 5 );
-		anim.SetParam( "aimat_weight", 1.0f );
-	}
-
-	[ClientRpc]
-	public override void OnMeleeMiss( float length, float speed, float size, float rotation, string animation, bool leftHand )
-	{
-		base.OnMeleeMiss( length, speed, size, rotation, animation, leftHand );
-
-		ViewModelEntity?.SetAnimFloat( "holdtype_attack", leftHand ? 2 : 1 );
-	}
-
-	[ClientRpc]
-	public override void OnMeleeHit( float length, float speed, float size, float rotation, string animation, bool leftHand )
-	{
-		base.OnMeleeHit( length, speed, size, rotation, animation, leftHand );
-
-		ViewModelEntity?.SetAnimFloat( "holdtype_attack", leftHand ? 2 : 1 );
+		anim.SetAnimParameter( "holdtype", 5 );
+		anim.SetAnimParameter( "aim_body_weight", 1.0f );
 	}
 }

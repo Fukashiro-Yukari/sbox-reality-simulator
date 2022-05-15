@@ -7,12 +7,8 @@ partial class RealityPlayer : Player
 
 	private DamageInfo lastDamage;
 
-	[Net] public PawnController VehicleController { get; set; }
-	[Net] public PawnAnimator VehicleAnimator { get; set; }
 	[Net] public Ragdoll Ragdoll { get; set; }
-	[Net, Predicted] public Entity Vehicle { get; set; }
 
-	public ICamera LastCamera { get; set; }
 	public Clothing.Container Clothing = new();
 	public Vector3 RespawnPoint { get; set; }
 
@@ -34,7 +30,7 @@ partial class RealityPlayer : Player
 		Controller = new WalkController();
 		Animator = new StandardPlayerAnimator();
 
-		Camera = new RealityCamera();
+		CameraMode = new RealityCamera();
 
 		if ( DevController is NoclipController )
 		{
@@ -68,10 +64,6 @@ partial class RealityPlayer : Player
 			PlaySound( "kersplat" );
 		}
 
-		VehicleController = null;
-		VehicleAnimator = null;
-		Vehicle = null;
-
 		BecomeRagdoll( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
 
 		if ( Inventory is Inventory inv )
@@ -97,17 +89,9 @@ partial class RealityPlayer : Player
 
 	public override PawnController GetActiveController()
 	{
-		if ( VehicleController != null ) return VehicleController;
 		if ( DevController != null ) return DevController;
 
 		return base.GetActiveController();
-	}
-
-	public override PawnAnimator GetActiveAnimator()
-	{
-		if ( VehicleAnimator != null ) return VehicleAnimator;
-
-		return base.GetActiveAnimator();
 	}
 
 	string oldavatar = ConsoleSystem.GetValue( "avatar" );
@@ -134,11 +118,6 @@ partial class RealityPlayer : Player
 			Clothing.DressEntity( this );
 		}
 
-		if ( VehicleController != null && DevController is NoclipController )
-		{
-			DevController = null;
-		}
-
 		var controller = GetActiveController();
 		if ( controller != null )
 			EnableSolidCollisions = !controller.HasTag( "noclip" );
@@ -156,7 +135,7 @@ partial class RealityPlayer : Player
 				var dropped = Inventory.DropActive();
 				if ( dropped != null )
 				{
-					dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRot.Forward * 80.0f + Vector3.Up * 100.0f, true );
+					dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRotation.Forward * 80.0f + Vector3.Up * 100.0f, true );
 					dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
 
 					timeSinceDropped = 0;
@@ -176,9 +155,9 @@ partial class RealityPlayer : Player
 			foreach ( var vec in vecs )
 			{
 				var startpos = Position + Vector3.Up * 3;
-				var endpos = startpos + vec * dist;
+				var EndPosition = startpos + vec * dist;
 
-				var tr = Trace.Ray( startpos, endpos )
+				var tr = Trace.Ray( startpos, EndPosition )
 					.UseHitboxes()
 					.Ignore( this )
 					.Size( 5 )
@@ -192,10 +171,10 @@ partial class RealityPlayer : Player
 
 			foreach ( var vec in vecs )
 			{
-				var startpos = EyePos;
-				var endpos = startpos + vec * dist;
+				var startpos = EyePosition;
+				var EndPosition = startpos + vec * dist;
 
-				var tr = Trace.Ray( startpos, endpos )
+				var tr = Trace.Ray( startpos, EndPosition )
 					.UseHitboxes()
 					.Ignore( this )
 					.Size( 5 )
@@ -232,7 +211,7 @@ partial class RealityPlayer : Player
 	[ServerCmd( "inventory_current" )]
 	public static void SetInventoryCurrent( string entName )
 	{
-		var target = ConsoleSystem.Caller.Pawn;
+		var target = ConsoleSystem.Caller.Pawn as Player;
 		if ( target == null ) return;
 
 		var inventory = target.Inventory;
@@ -266,15 +245,4 @@ partial class RealityPlayer : Player
 
 		//Render.Compute.Using
 	//}
-
-	// TODO
-
-	//public override bool HasPermission( string mode )
-	//{
-	//	if ( mode == "noclip" ) return true;
-	//	if ( mode == "devcam" ) return true;
-	//	if ( mode == "suicide" ) return true;
-	//
-	//	return base.HasPermission( mode );
-	//	}
 }

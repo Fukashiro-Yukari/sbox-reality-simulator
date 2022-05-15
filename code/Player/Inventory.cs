@@ -85,13 +85,14 @@ partial class Inventory : BaseInventory
 
 		if ( repent != null && repent.IsValid )
 		{
-			var ac = Owner.ActiveChild;
+			var ply = Owner as Player;
+			var ac = ply.ActiveChild;
 
 			if ( Drop( repent ) )
 			{
 				if ( ac != null && ac == repent )
 				{
-					Owner.ActiveChild = null;
+					ply.ActiveChild = null;
 				}
 
 				Owner.StartTouch( entity );
@@ -123,11 +124,12 @@ partial class Inventory : BaseInventory
 	{
 		if ( !Host.IsServer ) return null;
 
-		var ac = Owner.ActiveChild;
+		var ply = Owner as Player;
+		var ac = ply.ActiveChild;
 		if ( ac == null ) return null;
 		if ( Drop( ac ) )
 		{
-			Owner.ActiveChild = null;
+			ply.ActiveChild = null;
 			return ac;
 		}
 
@@ -138,7 +140,9 @@ partial class Inventory : BaseInventory
 	{
 		if ( !Host.IsServer ) return false;
 
-		Owner.ActiveChild = null;
+		var ply = Owner as Player;
+
+		ply.ActiveChild = null;
 
 		for ( int i = 0; i < List.Count; i++ )
 		{
@@ -158,7 +162,10 @@ partial class Inventory : BaseInventory
 		if ( !Contains( ent ) )
 			return false;
 
-		ent.OnCarryDrop( Owner );
+		if ( ent is BaseCarriable bc )
+		{
+			bc.OnCarryDrop( Owner );
+		}
 
 		return ent.Parent == null;
 	}

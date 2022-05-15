@@ -47,11 +47,11 @@ partial class CrossbowBolt : ModelEntity
 			// TODO: SPARKY PARTICLES (unless flesh)
 
 			Stuck = true;
-			Position = tr.EndPos + Rotation.Forward * -1;
+			Position = tr.EndPosition + Rotation.Forward * -1;
 
 			if ( tr.Entity.IsValid() )
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, tr.Direction * 200, 60.0f )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, tr.Direction * 200, 60.0f )
 													.UsingTraceResult( tr )
 													.WithAttacker( Owner )
 													.WithWeapon( this );
@@ -62,14 +62,14 @@ partial class CrossbowBolt : ModelEntity
 			// TODO: Parent to bone so this will stick in the meaty heads
 			if ( tr.Entity is Prop prop )
 			{
-				if ( prop.GetModel().GetPropData().Health > 0 )
+				if ( prop.Model.GetPropData().Health > 0 )
 				{
 					if ( prop.Health > 0 )
 						SetParent( prop, tr.Bone );
 					else
 						Delete();
 				}
-				else if ( prop.GetModel().GetPropData().Health <= 0 )
+				else if ( prop.Model.GetPropData().Health <= 0 )
 					SetParent( prop, tr.Bone );
 			}
 			else if ( tr.Entity is WorldEntity || tr.Entity.Health > 0 )

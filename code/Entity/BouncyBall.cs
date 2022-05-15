@@ -37,7 +37,7 @@ public partial class BouncyBallEntity : Prop
 				eventData.Entity.TakeDamage( DamageInfo.Generic( damage )
 					.WithFlag( DamageFlags.PhysicsImpact )
 					.WithAttacker( this )
-					.WithPosition( eventData.Pos )
+					.WithPosition( eventData.Position )
 					.WithForce( eventData.PreVelocity ) );
 			}
 		}

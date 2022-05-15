@@ -1,5 +1,25 @@
 {
-	"sharedassets": "*.*",
-	"type": "game",
-	"ident": "nepqneko.realitysimulator"
+  "Title": "Reality Simulator",
+  "Type": "game",
+  "Org": "nepqneko",
+  "Ident": "realitysimulator",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": null,
+  "HasCode": true,
+  "CodePath": "code",
+  "RootNamespace": "Sandbox",
+  "Metadata": {
+    "MapList": [
+      "facepunch.construct"
+    ],
+    "PerMapRanking": false,
+    "LeaderboardType": 0,
+    "RankType": 0,
+    "MapSelect": 2,
+    "GameNetworkType": 0,
+    "MaxPlayers": 1000,
+    "MinPlayers": 1
+  }
 }

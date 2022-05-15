@@ -59,7 +59,7 @@ public class RealityGame : Game
 
 		var ent = Library.Create<Entity>( entName );
 
-		ent.Position = tr.EndPos;
+		ent.Position = tr.EndPosition;
 		ent.PlaySound( "falling-3" );
 	}
 }

@@ -52,12 +52,12 @@ public partial class Carriable : BaseCarriable, IUse
 			if ( this is Weapon wep )
 			{
 				if ( wep.AmmoClip <= 0 && !string.IsNullOrEmpty( DrawEmptyAnim ) )
-					ViewModelEntity?.SetAnimBool( DrawEmptyAnim, true );
+					ViewModelEntity?.SetAnimParameter( DrawEmptyAnim, true );
 				else if ( !string.IsNullOrEmpty( DrawAnim ) )
-					ViewModelEntity?.SetAnimBool( DrawAnim, true );
+					ViewModelEntity?.SetAnimParameter( DrawAnim, true );
 			}
 			else if ( !string.IsNullOrEmpty( DrawAnim ) )
-				ViewModelEntity?.SetAnimBool( DrawAnim, true );
+				ViewModelEntity?.SetAnimParameter( DrawAnim, true );
 		}
 	}
 

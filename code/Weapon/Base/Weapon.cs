@@ -92,7 +92,7 @@ public partial class Weapon : Carriable, IUse
 			EnableSelfCollisions = false
 		};
 
-		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
+		PickupTrigger.PhysicsBody.AutoSleep = false;
 		AmmoClip = ClipSize;
 		
 		if ( ClipSize <= -1 )
@@ -169,7 +169,7 @@ public partial class Weapon : Carriable, IUse
 
 		DoBursts = false;
 
-		(Owner as AnimEntity)?.SetAnimBool( "b_reload", true );
+		(Owner as AnimEntity)?.SetAnimParameter( "b_reload", true );
 
 		if ( !string.IsNullOrEmpty( ReloadSound ) )
 			PlaySound( ReloadSound );
@@ -337,7 +337,7 @@ public partial class Weapon : Carriable, IUse
 			return;
 		}
 
-		(Owner as AnimEntity).SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -375,7 +375,7 @@ public partial class Weapon : Carriable, IUse
 			return;
 		}
 
-		(Owner as AnimEntity).SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
 
 		NPCShootEffects();
 
@@ -462,19 +462,19 @@ public partial class Weapon : Carriable, IUse
 	[ClientRpc]
 	public virtual void StartReloadEffects()
 	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
+		ViewModelEntity?.SetAnimParameter( "reload", true );
 	}
 
 	[ClientRpc]
 	public virtual void ToggleSilencerEffects( bool on )
 	{
-		ViewModelEntity?.SetAnimBool( on ? "add_silencer" : "remove_silencer", true );
+		ViewModelEntity?.SetAnimParameter( on ? "add_silencer" : "remove_silencer", true );
 	}
 
 	[ClientRpc]
 	public virtual void SetSilencedEffects( bool on )
 	{
-		ViewModelEntity?.SetAnimBool( "silenced", on );
+		ViewModelEntity?.SetAnimParameter( "silenced", on );
 	}
 
 	public bool TakeAmmo( int amount )
@@ -513,21 +513,23 @@ public partial class Weapon : Carriable, IUse
 		if ( Owner != null )
 			return false;
 
-		if ( !user.IsValid() )
+		var ply = user as Player;
+
+		if ( !ply.IsValid() )
 			return false;
 
-		if ( user.Inventory is Inventory inventory )
+		if ( ply.Inventory is Inventory inventory )
 		{
 			if ( inventory.CanReplace( this ) )
 			{
 				var dropped = inventory.Replace( this );
 				if ( dropped != null )
 				{
-					dropped.PhysicsGroup.ApplyImpulse( user.Velocity + user.EyeRot.Forward * 80.0f + Vector3.Up * 100.0f, true );
+					dropped.PhysicsGroup.ApplyImpulse( user.Velocity + user.EyeRotation.Forward * 80.0f + Vector3.Up * 100.0f, true );
 					dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
 
-					if ( user is RealityPlayer ply )
-						ply.ResetDroppedTime();
+					if ( user is RealityPlayer player )
+						player.ResetDroppedTime();
 				}
 
 				return false;
@@ -543,7 +545,9 @@ public partial class Weapon : Carriable, IUse
 	{
 		if ( Owner != null ) return false;
 
-		if ( user.Inventory is Inventory inventory )
+		var ply = user as Player;
+
+		if ( ply.Inventory is Inventory inventory )
 		{
 			return inventory.CanReplace( this ) || inventory.CanAdd( this );
 		}
@@ -553,7 +557,6 @@ public partial class Weapon : Carriable, IUse
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
 		Delete();
 	}
 
@@ -578,9 +581,9 @@ public partial class Weapon : Carriable, IUse
 		}
 
 		if ( BurstsMode && !string.IsNullOrEmpty( BurstAnimation ) )
-			ViewModelEntity?.SetAnimBool( BurstAnimation, true );
+			ViewModelEntity?.SetAnimParameter( BurstAnimation, true );
 		else
-			ViewModelEntity?.SetAnimBool( "fire", true );
+			ViewModelEntity?.SetAnimParameter( "fire", true );
 
 		CrosshairPanel?.CreateEvent( "fire" );
 	}
@@ -607,11 +610,11 @@ public partial class Weapon : Carriable, IUse
 		{
 			if ( AmmoClip > 0 ) return;
 
-			ViewModelEntity?.SetAnimBool( "empty", true );
+			ViewModelEntity?.SetAnimParameter( "empty", true );
 		}
 		else
 		{
-			ViewModelEntity?.SetAnimBool( "empty", false );
+			ViewModelEntity?.SetAnimParameter( "empty", false );
 		}
 	}
 
@@ -657,7 +660,7 @@ public partial class Weapon : Carriable, IUse
 			if ( !IsServer ) continue;
 
 			tr.Surface.DoBulletImpactServer( tr );
-			BulletTracer( tr.EndPos );
+			BulletTracer( tr.EndPosition );
 
 			if ( !tr.Entity.IsValid() ) continue;
 
@@ -666,7 +669,7 @@ public partial class Weapon : Carriable, IUse
 			//
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, forward * 100 * force, damage )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -681,7 +684,7 @@ public partial class Weapon : Carriable, IUse
 	/// </summary>
 	public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
 	{
-		ShootBullet( Owner.EyePos, Owner.EyeRot.Forward, spread, force, damage, bulletSize );
+		ShootBullet( Owner.EyePosition, Owner.EyeRotation.Forward, spread, force, damage, bulletSize );
 	}
 
 	/// <summary>
@@ -689,8 +692,8 @@ public partial class Weapon : Carriable, IUse
 	/// </summary>
 	public virtual void ShootBullets( int numBullets, float spread, float force, float damage, float bulletSize )
 	{
-		var pos = Owner.EyePos;
-		var dir = Owner.EyeRot.Forward;
+		var pos = Owner.EyePosition;
+		var dir = Owner.EyeRotation.Forward;
 
 		for ( int i = 0; i < numBullets; i++ )
 		{
@@ -734,17 +737,19 @@ public partial class Weapon : Carriable, IUse
 	/// </summary>
 	public virtual IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2.0f )
 	{
-		bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
+		bool InWater = Map.Physics.IsPointWater( start );
 
 		var tr = Trace.Ray( start, end )
 				.UseHitboxes()
 				.HitLayer( CollisionLayer.Water, !InWater )
+				.HitLayer( CollisionLayer.Debris )
 				.Ignore( Owner )
 				.Ignore( this )
 				.Size( radius )
 				.Run();
 
-		yield return tr;
+		if ( tr.Hit )
+			yield return tr;
 
 		//
 		// Another trace, bullet going through thin material, penetrating water surface?

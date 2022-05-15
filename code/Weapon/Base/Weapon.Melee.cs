@@ -38,15 +38,15 @@ public partial class WeaponMelee : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		(Owner as AnimEntity).SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
 
-		var forward = Owner.EyeRot.Forward;
+		var forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool hit = false;
 
 		int index = 0;
-		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * meleeDistance, ImpactSize ) )
+		foreach ( var tr in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * meleeDistance, ImpactSize ) )
 		{
 			if ( index > 0 ) break;
 
@@ -109,7 +109,7 @@ public partial class WeaponMelee : Weapon
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * force, IsBack ? backDamage : damage )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, forward * force, IsBack ? backDamage : damage )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -171,7 +171,7 @@ public partial class WeaponMelee : Weapon
 				_ = new Sandbox.ScreenShake.Perlin( length, speed, size, rotation );
 		}
 
-		ViewModelEntity?.SetAnimBool( animation, true );
+		ViewModelEntity?.SetAnimParameter( animation, true );
 	}
 
 	[ClientRpc]
@@ -185,7 +185,7 @@ public partial class WeaponMelee : Weapon
 				_ = new Sandbox.ScreenShake.Perlin( length, speed, size, rotation );
 		}
 
-		ViewModelEntity?.SetAnimBool( animation, true );
+		ViewModelEntity?.SetAnimParameter( animation, true );
 		CrosshairPanel?.CreateEvent( "fire" );
 	}
 }

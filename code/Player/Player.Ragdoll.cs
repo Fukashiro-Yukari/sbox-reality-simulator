@@ -46,8 +46,8 @@ partial class RealityPlayer
 		EnableAllCollisions = false;
 		EnableDrawing = false;
 
-		if ( Vehicle.IsValid() )
-			velocity += Vehicle.Velocity * Vector3.Up * 5000;
+		//if ( Vehicle.IsValid() )
+		//	velocity += Vehicle.Velocity * Vector3.Up * 5000;
 
 		if ( forcePos.IsNaN )
 			forcePos = Position;

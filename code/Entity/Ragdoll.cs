@@ -172,7 +172,7 @@ partial class Ragdoll : AnimEntity
 	private void Tick()
 	{
 		if ( !IsValidPlayer() ) return;
-		if ( WaterLevel.Entity != null )
+		if ( WaterEntity != null )
 			_ = BecomePlayer();
 
 		if ( player.LifeState != LifeState.Alive )

@@ -1,14 +1,14 @@
 using Sandbox;
 
-public class RealityCamera : Camera
+public class RealityCamera : CameraMode
 {
 	public override void Activated()
 	{
 		var pawn = Local.Pawn;
 		if ( pawn == null ) return;
 
-		Position = pawn.EyePos;
-		Rotation = pawn.EyeRot;
+		Position = pawn.EyePosition;
+		Rotation = pawn.EyeRotation;
 	}
 
 	public override void Build( ref CameraSetup camSetup )

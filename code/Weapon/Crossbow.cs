@@ -33,9 +33,9 @@ partial class Crossbow : WeaponSniper
 		{
 			var bolt = new CrossbowBolt();
 			bolt.Position = pos;
-			bolt.Rotation = Owner.EyeRot;
+			bolt.Rotation = Owner.EyeRotation;
 			bolt.Owner = Owner;
-			bolt.Velocity = Owner.EyeRot.Forward * 100;
+			bolt.Velocity = Owner.EyeRotation.Forward * 100;
 
 			return bolt;
 		}
@@ -43,8 +43,8 @@ partial class Crossbow : WeaponSniper
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 3 ); // TODO this is shit
-		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype", 3 ); // TODO this is shit
+		anim.SetAnimParameter( "aim_body_weight", 1.0f );
 	}
 
 	//[Event.Tick]
@@ -52,6 +52,6 @@ partial class Crossbow : WeaponSniper
 	//{
 		//Log.Info((IsServer ? "Server " : "Client ") + (AmmoClip >= 1));
 
-		//ViewModelEntity?.SetAnimBool( "loaded", false );
+		//ViewModelEntity?.SetAnimParameter( "loaded", false );
 	//}
 }
