@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-[Library( "gravgun" )]
+[Library( "weapon_gravgun", Title = "Gravity Gun", Spawnable = true )]
 public partial class GravGun : Carriable
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
