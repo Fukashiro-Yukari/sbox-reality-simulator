@@ -1,7 +1,7 @@
 using Sandbox;
 using System.Threading.Tasks;
 
-partial class Ragdoll : Prop
+partial class Ragdoll : AnimatedEntity
 {
 	RealityPlayer player;
 	bool isBecome;
