@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 
-[Library( "weapon_357", Title = ".357 Revolver", Spawnable = true )]
-[Hammer.EditorModel("models/weapons/w_357.vmdl")]
+[Spawnable]
+[Library( "weapon_357", Title = ".357 Revolver" )]
+[EditorModel("models/weapons/w_357.vmdl")]
 partial class Python357 : Weapon
 { 
 	public override string ViewModelPath => "weapons/hl2_357/v_hl2_357.vmdl";

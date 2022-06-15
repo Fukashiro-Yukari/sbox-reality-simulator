@@ -1,11 +1,12 @@
 using Sandbox;
 
-[Library( "weapon_tmp", Title = "TMP", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_tmp/w_css_sweapon_tmp.vmdl" )]
+[Spawnable]
+[Library( "weapon_tmp", Title = "TMP" )]
+[EditorModel( "weapons/css_tmp/w_css_smg_tmp.vmdl" )]
 partial class TMP : Weapon
 {
-	public override string ViewModelPath => "weapons/css_tmp/v_css_sweapon_tmp.vmdl";
-	public override string WorldModelPath => "weapons/css_tmp/w_css_sweapon_tmp.vmdl";
+	public override string ViewModelPath => "weapons/css_tmp/v_css_smg_tmp.vmdl";
+	public override string WorldModelPath => "weapons/css_tmp/w_css_smg_tmp.vmdl";
 
 	public override int ClipSize => 30;
 	public override int Bucket => 0;
@@ -23,7 +24,7 @@ partial class TMP : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

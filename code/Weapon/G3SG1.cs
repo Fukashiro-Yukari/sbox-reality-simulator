@@ -1,8 +1,9 @@
 using Sandbox;
 using System.Collections.Generic;
 
-[Library( "weapon_g3sg1", Title = "G3/SG-1", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_g3sg1/w_css_snip_g3sg1.vmdl" )]
+[Spawnable]
+[Library( "weapon_g3sg1", Title = "G3/SG-1" )]
+[EditorModel( "weapons/css_g3sg1/w_css_snip_g3sg1.vmdl" )]
 partial class G3SG1 : WeaponSniper
 {
 	public override string ViewModelPath => "weapons/css_g3sg1/v_css_snip_g3sg1.vmdl";
@@ -25,7 +26,7 @@ partial class G3SG1 : WeaponSniper
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1f,
 		Rotation = 0.5f
 	};

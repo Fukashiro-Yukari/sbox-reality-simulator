@@ -1,7 +1,8 @@
 using Sandbox;
 
-[Library( "weapon_galil", Title = "Galil", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_galil/w_css_rif_galil.vmdl" )]
+[Spawnable]
+[Library( "weapon_galil", Title = "Galil" )]
+[EditorModel( "weapons/css_galil/w_css_rif_galil.vmdl" )]
 partial class GALIL : Weapon
 {
 	public override string ViewModelPath => "weapons/css_galil/v_css_rif_galil.vmdl";
@@ -22,7 +23,7 @@ partial class GALIL : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

@@ -169,7 +169,7 @@ public partial class Weapon : Carriable, IUse
 
 		DoBursts = false;
 
-		(Owner as AnimEntity)?.SetAnimParameter( "b_reload", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter( "b_reload", true );
 
 		if ( !string.IsNullOrEmpty( ReloadSound ) )
 			PlaySound( ReloadSound );
@@ -220,7 +220,7 @@ public partial class Weapon : Carriable, IUse
 			OnReloadFinish();
 		}
 
-		if ( UseSilencer && !IsReloading && Input.Pressed( InputButton.Attack2 ) )
+		if ( UseSilencer && !IsReloading && Input.Pressed( InputButton.SecondaryAttack ) )
 		{
 			if ( SilencerDelay ) return;
 
@@ -231,7 +231,7 @@ public partial class Weapon : Carriable, IUse
 			_ = SilencerEquip();
 		}
 
-		if ( UseBursts && Input.Pressed( InputButton.Attack2 ) )
+		if ( UseBursts && Input.Pressed( InputButton.SecondaryAttack ) )
 		{
 			BurstsMode = !BurstsMode;
 		}
@@ -286,8 +286,8 @@ public partial class Weapon : Carriable, IUse
 
 	public virtual bool CanPrimaryAttack()
 	{
-		if ( !Owner.IsValid() || !Input.Down( InputButton.Attack1 ) ) return false;
-		if ( !Automatic && !Input.Pressed( InputButton.Attack1 ) ) return false;
+		if ( !Owner.IsValid() || !Input.Down( InputButton.PrimaryAttack ) ) return false;
+		if ( !Automatic && !Input.Pressed( InputButton.PrimaryAttack ) ) return false;
 
 		var rate = PrimaryRate;
 		if ( rate <= 0 ) return true;
@@ -309,7 +309,7 @@ public partial class Weapon : Carriable, IUse
 
 	public virtual bool CanSecondaryAttack()
 	{
-		if ( !Owner.IsValid() || !Input.Down( InputButton.Attack2 ) ) return false;
+		if ( !Owner.IsValid() || !Input.Down( InputButton.SecondaryAttack ) ) return false;
 
 		var rate = SecondaryRate;
 		if ( rate <= 0 ) return true;
@@ -331,13 +331,12 @@ public partial class Weapon : Carriable, IUse
 	{
 		if ( !TakeAmmo( ClipTake ) )
 		{
-			//DryFire();
-			Reload();
+			DryFire();
 
 			return;
 		}
 
-		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -375,7 +374,7 @@ public partial class Weapon : Carriable, IUse
 			return;
 		}
 
-		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
 		NPCShootEffects();
 
@@ -501,11 +500,7 @@ public partial class Weapon : Carriable, IUse
 	[ClientRpc]
 	public virtual void DryFire()
 	{
-		// CLICK
-	}
-
-	public override void CreateHudElements()
-	{
+		PlaySound( "dm.dryfire" );
 	}
 
 	public override bool OnUse( Entity user )
@@ -571,18 +566,10 @@ public partial class Weapon : Carriable, IUse
 				Particles.Create( BulletEjectParticle, EffectEntity, "ejection_point" );
 		}
 
-		if ( IsLocalPawn )
-		{
-			if ( ScreenShake != null )
-				_ = new Sandbox.ScreenShake.Perlin( ScreenShake.Length, ScreenShake.Speed, ScreenShake.Size, ScreenShake.Rotation );
-		}
-
 		if ( BurstsMode && !string.IsNullOrEmpty( BurstAnimation ) )
 			ViewModelEntity?.SetAnimParameter( BurstAnimation, true );
 		else
 			ViewModelEntity?.SetAnimParameter( "fire", true );
-
-		CrosshairPanel?.CreateEvent( "fire" );
 	}
 
 	[ClientRpc]
@@ -647,19 +634,14 @@ public partial class Weapon : Carriable, IUse
 		// ShootBullet is coded in a way where we can have bullets pass through shit
 		// or bounce off shit, in which case it'll return multiple results
 		//
-		int index = 0;
 		foreach ( var tr in TraceBullet( pos, pos + forward * 5000, bulletSize ) )
 		{
-			if ( index > 0 ) break;
-
-			index++;
+			tr.Surface.DoBulletImpact( tr );
 
 			if ( !IsServer ) continue;
-
-			tr.Surface.DoBulletImpactServer( tr );
-			BulletTracer( tr.EndPosition );
-
 			if ( !tr.Entity.IsValid() ) continue;
+
+			BulletTracer( tr.EndPosition );
 
 			//
 			// We turn predictiuon off for this, so any exploding effects don't get culled etc
@@ -761,13 +743,6 @@ public enum CType
 	ShotGun,
 	Pistol,
 	SMG,
-	Rifle
-}
-
-public class ScreenShake
-{
-	public float Length { get; set; } = 1.0f;
-	public float Speed { get; set; } = 1.0f;
-	public float Size { get; set; } = 1.0f;
-	public float Rotation { get; set; } = 0.6f;
+	Rifle,
+	Crossbow
 }

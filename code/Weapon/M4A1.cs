@@ -1,7 +1,8 @@
 using Sandbox;
 
-[Library( "weapon_m4a1", Title = "M4A1", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_m4a1/css_w_m4a1.vmdl" )]
+[Spawnable]
+[Library( "weapon_m4a1", Title = "M4A1" )]
+[EditorModel( "weapons/css_m4a1/css_w_m4a1.vmdl" )]
 partial class M4A1 : Weapon
 {
 	public override string ViewModelPath => "weapons/css_m4a1/css_v_m4a1.vmdl";
@@ -25,7 +26,7 @@ partial class M4A1 : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

@@ -43,7 +43,7 @@ public partial class WeaponSniper : Weapon
 			return;
 		}
 
-		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -107,7 +107,7 @@ public partial class WeaponSniper : Weapon
 	{
 		base.Simulate( owner );
 
-		if ( Input.Pressed( InputButton.Attack2 ) && !IsReloading )
+		if ( Input.Pressed( InputButton.SecondaryAttack ) && !IsReloading )
 		{
 			ZoomLevel++;
 
@@ -126,16 +126,6 @@ public partial class WeaponSniper : Weapon
 
 		if ( IsReloading )
 			ZoomLevel = -1;
-	}
-
-	public override void CreateHudElements()
-	{
-		base.CreateHudElements();
-
-		if ( Local.Hud == null ) return;
-
-		//SniperScopePanel = new SniperScope( LensTexture, ScopeTexture );
-		//SniperScopePanel.Parent = Local.Hud;
 	}
 
 	public override void PostCameraSetup( ref CameraSetup camSetup )

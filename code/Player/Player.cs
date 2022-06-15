@@ -9,7 +9,7 @@ partial class RealityPlayer : Player
 
 	[Net] public Ragdoll Ragdoll { get; set; }
 
-	public Clothing.Container Clothing = new();
+	public ClothingContainer Clothing = new();
 	public Vector3 RespawnPoint { get; set; }
 
 	public RealityPlayer()
@@ -203,7 +203,7 @@ partial class RealityPlayer : Player
 		base.StartTouch( other );
 	}
 
-	[ServerCmd( "inventory_current" )]
+	[ConCmd.Server( "inventory_current" )]
 	public static void SetInventoryCurrent( string entName )
 	{
 		var target = ConsoleSystem.Caller.Pawn as Player;
@@ -219,7 +219,7 @@ partial class RealityPlayer : Player
 			if ( !slot.IsValid() )
 				continue;
 
-			if ( !slot.ClassInfo.IsNamed( entName ) )
+			if ( slot.ClassName != entName )
 				continue;
 
 			inventory.SetActiveSlot( i, false );

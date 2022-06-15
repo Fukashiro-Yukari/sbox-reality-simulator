@@ -38,8 +38,6 @@ public partial class WeaponGrenade : Weapon
 	{
 		if ( Pin ) return;
 
-		ThrowEffects();
-
 		Pin = true;
 	}
 
@@ -50,13 +48,12 @@ public partial class WeaponGrenade : Weapon
 
 		if ( Pin )
 		{
-			if ( !Input.Down(InputButton.Attack1) && !Input.Down( InputButton.Attack2 ) )
+			if ( !Input.Down(InputButton.PrimaryAttack) && !Input.Down( InputButton.SecondaryAttack ) )
 			{
 				StartThrow = 0f;
 				Pin = false;
 
-				(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
-				ThrowEffects();
+				(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 			}
 			else
 			{
@@ -67,15 +64,6 @@ public partial class WeaponGrenade : Weapon
 		{
 			Throw();
 		}
-	}
-
-	[ClientRpc]
-	protected virtual void ThrowEffects()
-	{
-		Host.AssertClient();
-
-		ViewModelEntity?.SetAnimParameter( "fire", true );
-		CrosshairPanel?.CreateEvent( "fire" );
 	}
 
 	public virtual void Throw()

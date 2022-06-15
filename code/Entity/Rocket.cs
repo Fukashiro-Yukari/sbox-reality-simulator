@@ -1,6 +1,5 @@
 using Sandbox;
 using System.Collections.Generic;
-using Utils;
 
 public class Rocket : FiredEntity
 {
@@ -77,7 +76,7 @@ public class Rocket : FiredEntity
 			Particles.Create( ExplosionEffect, PhysicsBody.MassCenter );
 
 		// Screenshake
-		ScreenUtil.ShakeAt( PhysicsBody.MassCenter, ExplosionRadius * 2, ExplosionShake );
+		//ScreenUtil.ShakeAt( PhysicsBody.MassCenter, ExplosionRadius * 2, ExplosionShake );
 
 		// Damage
 		BlastUtil.Explode( PhysicsBody.MassCenter, ExplosionRadius, ExplosionDamage, ExplosionForce, Owner, Weapon, this );

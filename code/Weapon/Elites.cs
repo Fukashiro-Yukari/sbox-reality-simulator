@@ -1,7 +1,8 @@
 using Sandbox;
 
-[Library( "weapon_elite", Title = "Dual Elites", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_elite/w_css_pist_elite_dropped.vmdl" )]
+[Spawnable]
+[Library( "weapon_elite", Title = "Dual Elites" )]
+[EditorModel( "weapons/css_elite/w_css_pist_elite_dropped.vmdl" )]
 partial class Elites : WeaponDouble
 {
 	public override string ViewModelPath => "weapons/css_elite/v_css_pist_elite.vmdl";
@@ -25,7 +26,7 @@ partial class Elites : WeaponDouble
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1.0f,
 		Rotation = 0.5f
 	};

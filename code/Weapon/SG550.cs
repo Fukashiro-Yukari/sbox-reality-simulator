@@ -1,8 +1,9 @@
 using Sandbox;
 using System.Collections.Generic;
 
-[Library( "weapon_sg550", Title = "SG-550", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_sg550/w_css_snip_sg550.vmdl" )]
+[Spawnable]
+[Library( "weapon_sg550", Title = "SG-550" )]
+[EditorModel( "weapons/css_sg550/w_css_snip_sg550.vmdl" )]
 partial class SG550 : WeaponSniper
 {
 	public override string ViewModelPath => "weapons/css_sg550/v_css_snip_sg550.vmdl";
@@ -25,7 +26,7 @@ partial class SG550 : WeaponSniper
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1f,
 		Rotation = 0.5f
 	};

@@ -1,11 +1,12 @@
 using Sandbox;
 
-[Library( "weapon_fists", Title = "Fists", Spawnable = false )]
+[Spawnable]
+[Library( "weapon_fists", Title = "Fists" )]
 partial class Fists : WeaponMelee
 {
-	public override string ViewModelPath => "models/firstperson/temp_punch/temp_punch.vmdl";
+	public override string ViewModelPath => "models/first_person/first_person_arms.vmdl";
 
-	public override int Bucket => 3;
+	public override int Bucket => 2;
 	public override float PrimarySpeed => 0.5f;
 	public override float SecondarySpeed => 0.5f;
 	public override float PrimaryDamage => 25f;

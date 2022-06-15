@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 
-[Library( "weapon_famas", Title = "FAMAS", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_famas/w_css_rif_famas.vmdl" )]
+[Spawnable]
+[Library( "weapon_famas", Title = "FAMAS" )]
+[EditorModel( "weapons/css_famas/w_css_rif_famas.vmdl" )]
 partial class FAMAS : Weapon
 {
 	public override string ViewModelPath => "weapons/css_famas/v_css_rif_famas.vmdl";
@@ -23,7 +24,7 @@ partial class FAMAS : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

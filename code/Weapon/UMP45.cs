@@ -1,11 +1,12 @@
 using Sandbox;
 
-[Library( "weapon_ump45", Title = "UMP 45", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_ump45/w_css_sweapon_ump45.vmdl" )]
+[Spawnable]
+[Library( "weapon_ump45", Title = "UMP 45" )]
+[EditorModel( "weapons/css_ump45/w_css_smg_ump45.vmdl" )]
 partial class UMP45 : Weapon
 {
-	public override string ViewModelPath => "weapons/css_ump45/v_css_sweapon_ump45.vmdl";
-	public override string WorldModelPath => "weapons/css_ump45/w_css_sweapon_ump45.vmdl";
+	public override string ViewModelPath => "weapons/css_ump45/v_css_smg_ump45.vmdl";
+	public override string WorldModelPath => "weapons/css_ump45/w_css_smg_ump45.vmdl";
 
 	public override int ClipSize => 25;
 	public override int Bucket => 0;
@@ -23,7 +24,7 @@ partial class UMP45 : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

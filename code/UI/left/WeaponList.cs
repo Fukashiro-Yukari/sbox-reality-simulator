@@ -19,11 +19,13 @@ public partial class WeaponList : Panel
 		Canvas.Layout.ItemHeight = 100;
 		Canvas.OnCreateCell = ( cell, data ) =>
 		{
-			var entry = (LibraryAttribute)data;
-			var btn = cell.Add.Button( entry.Title );
-			btn.AddClass( "icon" );
-			btn.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn_entity", entry.Name ) );
-			btn.Style.BackgroundImage = Texture.Load( FileSystem.Mounted, $"/entity/{entry.Name}.png", false );
+			if ( data is TypeDescription type )
+			{
+				var btn = cell.Add.Button( type.Title );
+				btn.AddClass( "icon" );
+				btn.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn_entity", type.ClassName ) );
+				btn.Style.BackgroundImage = Texture.Load( FileSystem.Mounted, $"/entity/{type.ClassName}.png", false );
+			}
 		};
 
 		LoadAllItem( false );
@@ -34,7 +36,10 @@ public partial class WeaponList : Panel
 		if ( isreload )
 			Canvas.Data.Clear();
 
-		var ents = Library.GetAllAttributes<Carriable>().Where( x => x.Spawnable ).OrderBy( x => x.Title ).ToArray();
+		var ents = TypeLibrary.GetDescriptions<Carriable>()
+									.Where( x => x.HasTag( "spawnable" ) )
+									.OrderBy( x => x.Title )
+									.ToArray();
 
 		foreach ( var entry in ents )
 		{

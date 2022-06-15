@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 
-[Library( "weapon_pumpshotgun", Title = "Pump Shotgun", Spawnable = true )]
-[Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
+[Spawnable]
+[Library( "weapon_pumpshotgun", Title = "Pump Shotgun" )]
+[EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 partial class PumpShotgun : WeaponShotgun
 { 
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
@@ -23,7 +24,7 @@ partial class PumpShotgun : WeaponShotgun
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 1.0f,
-		Speed = 1.5f,
+		Delay = 1.5f,
 		Size = 2.0f,
 	};
 
@@ -48,7 +49,7 @@ partial class PumpShotgun : WeaponShotgun
 			}
 		}
 
-		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -68,13 +69,5 @@ partial class PumpShotgun : WeaponShotgun
 		Host.AssertClient();
 
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-		ViewModelEntity?.SetAnimParameter( "fire_double", true );
-		CrosshairPanel?.CreateEvent( "fire" );
-
-		if ( IsLocalPawn )
-		{
-			new Sandbox.ScreenShake.Perlin(3.0f, 3.0f, 3.0f);
-		}
 	}
 }

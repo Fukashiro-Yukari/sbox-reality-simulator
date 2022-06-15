@@ -2,8 +2,9 @@ using Sandbox;
 using System;
 using System.Collections.Generic;
 
-[Library( "weapon_rpg", Title = "RPG-7", Spawnable = true )]
-[Hammer.EditorModel( "weapons/swb/explosives/rpg-7/swb_w_rpg7.vmdl" )]
+[Spawnable]
+[Library( "weapon_rpg", Title = "RPG-7" )]
+[EditorModel( "weapons/swb/explosives/rpg-7/swb_w_rpg7.vmdl" )]
 partial class RPG : Weapon
 {
 	public override string ViewModelPath => "weapons/swb/explosives/rpg-7/swb_v_rpg7.vmdl";
@@ -28,7 +29,7 @@ partial class RPG : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};
@@ -64,7 +65,7 @@ partial class RPG : Weapon
 			rocket.ExplosionShake = new ScreenShake
 			{
 				Length = 1f,
-				Speed = 5f,
+				Delay = 5f,
 				Size = 7f,
 				Rotation = 3f
 			};

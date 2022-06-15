@@ -25,15 +25,6 @@ public partial class WeaponDouble : Weapon
 				Particles.Create( BulletEjectParticle, EffectEntity, IsSecondary ? EjectionPointLeftAttachment : EjectionPointRightAttachment );
 		}
 
-		if ( IsLocalPawn )
-		{
-			if ( ScreenShake != null )
-				_ = new Sandbox.ScreenShake.Perlin( ScreenShake.Length, ScreenShake.Speed, ScreenShake.Size, ScreenShake.Rotation );
-		}
-
-		ViewModelEntity?.SetAnimParameter( IsSecondary ? FireAnimLeftName : FireAnimRightName, true );
-		CrosshairPanel?.CreateEvent( "fire" );
-
 		IsSecondary = !IsSecondary;
 	}
 

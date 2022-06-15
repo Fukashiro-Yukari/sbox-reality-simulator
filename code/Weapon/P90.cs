@@ -1,12 +1,13 @@
 using Sandbox;
 using System.Collections.Generic;
 
-[Library( "weapon_p90", Title = "P90", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_p90/w_css_sweapon_p90.vmdl" )]
+[Spawnable]
+[Library( "weapon_p90", Title = "P90" )]
+[EditorModel( "weapons/css_p90/w_css_smg_p90.vmdl" )]
 partial class P90 : WeaponSniper
 {
-	public override string ViewModelPath => "weapons/css_p90/v_css_sweapon_p90.vmdl";
-	public override string WorldModelPath => "weapons/css_p90/w_css_sweapon_p90.vmdl";
+	public override string ViewModelPath => "weapons/css_p90/v_css_smg_p90.vmdl";
+	public override string WorldModelPath => "weapons/css_p90/w_css_smg_p90.vmdl";
 
 	public override int ClipSize => 50;
 	public override int Bucket => 0;
@@ -24,7 +25,7 @@ partial class P90 : WeaponSniper
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 0.5f,
 		Rotation = 0.5f
 	};

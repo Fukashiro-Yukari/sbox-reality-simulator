@@ -1,8 +1,9 @@
 using Sandbox;
 using System.Collections.Generic;
 
-[Library( "weapon_awp", Title = "AWP", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_awp/css_w_awp.vmdl" )]
+[Spawnable]
+[Library( "weapon_awp", Title = "AWP" )]
+[EditorModel( "weapons/css_awp/css_w_awp.vmdl" )]
 partial class AWP : WeaponSniper
 {
 	public override string ViewModelPath => "weapons/css_awp/css_v_awp.vmdl";
@@ -25,7 +26,7 @@ partial class AWP : WeaponSniper
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1f,
 		Rotation = 0.5f
 	};

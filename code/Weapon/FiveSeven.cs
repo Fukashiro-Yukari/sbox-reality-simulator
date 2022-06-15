@@ -1,7 +1,8 @@
 using Sandbox;
 
-[Library( "weapon_fiveseven", Title = "Five-Seven", Spawnable = true )]
-[Hammer.EditorModel( "weapons/css_fiveseven/w_css_pist_fiveseven.vmdl" )]
+[Spawnable]
+[Library( "weapon_fiveseven", Title = "Five-Seven" )]
+[EditorModel( "weapons/css_fiveseven/w_css_pist_fiveseven.vmdl" )]
 partial class FiveSeven : Weapon
 {
 	public override string ViewModelPath => "weapons/css_fiveseven/v_css_pist_fiveseven.vmdl";
@@ -24,7 +25,7 @@ partial class FiveSeven : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1.0f,
 		Rotation = 0.5f
 	};

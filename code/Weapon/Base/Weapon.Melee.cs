@@ -38,7 +38,7 @@ public partial class WeaponMelee : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		(Owner as AnimEntity).SetAnimParameter( "b_attack", true );
+		(Owner as AnimatedEntity).SetAnimParameter( "b_attack", true );
 
 		var forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
@@ -56,24 +56,11 @@ public partial class WeaponMelee : Weapon
 			{
 				PlaySound( MissSound );
 
-				if ( screenShakeMiss == null )
-				{
-					screenShakeMiss = new ScreenShake
-					{
-						Length = -1f,
-						Speed = -1f,
-						Size = -1f,
-						Rotation = -1f
-					};
-				}
-
-				OnMeleeMiss( screenShakeMiss.Length, screenShakeMiss.Speed, screenShakeMiss.Size, screenShakeMiss.Rotation, animationMiss, leftHand );
-
 				continue;
 			}
 
 			if ( IsServer )
-				tr.Surface.DoBulletImpactServer( tr );
+				tr.Surface.DoBulletImpact( tr );
 
 			hit = true;
 			var isFlesh = tr.Entity is Player || tr.Entity is Ragdoll;
@@ -91,19 +78,6 @@ public partial class WeaponMelee : Weapon
 			{
 				PlaySound( isFlesh ? swingSound : HitWorldSound );
 			}
-
-			if ( screenShakeHit == null )
-			{
-				screenShakeHit = new ScreenShake
-				{
-					Length = -1f,
-					Speed = -1f,
-					Size = -1f,
-					Rotation = -1f
-				};
-			}
-
-			OnMeleeHit( screenShakeHit.Length, screenShakeHit.Speed, screenShakeHit.Size, screenShakeHit.Rotation, animationHit, leftHand );
 
 			if ( !IsServer ) continue;
 
@@ -135,14 +109,14 @@ public partial class WeaponMelee : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		return CanMelee( TimeSincePrimaryAttack, PrimarySpeed, InputButton.Attack1 );
+		return CanMelee( TimeSincePrimaryAttack, PrimarySpeed, InputButton.PrimaryAttack );
 	}
 
 	public override bool CanSecondaryAttack()
 	{
 		if ( !CanUseSecondary ) return false;
 
-		return CanMelee( TimeSinceSecondaryAttack, SecondarySpeed, InputButton.Attack2 );
+		return CanMelee( TimeSinceSecondaryAttack, SecondarySpeed, InputButton.SecondaryAttack );
 	}
 
 	public override bool CanReload()
@@ -158,34 +132,5 @@ public partial class WeaponMelee : Weapon
 	public override void AttackSecondary()
 	{
 		_ = MeleeAttack( SecondaryDamage, SecondaryForce, SecondaryAttackSound, SecondaryAnimationHit, SecondaryAnimationMiss, SecondaryScreenShakeHit, SecondaryScreenShakeMiss, SecondaryMeleeDistance, SecondaryBackDamage, false );
-	}
-
-	[ClientRpc]
-	public virtual void OnMeleeMiss( float length, float speed, float size, float rotation, string animation, bool leftHand )
-	{
-		Host.AssertClient();
-
-		if ( IsLocalPawn )
-		{
-			if ( length != -1 )
-				_ = new Sandbox.ScreenShake.Perlin( length, speed, size, rotation );
-		}
-
-		ViewModelEntity?.SetAnimParameter( animation, true );
-	}
-
-	[ClientRpc]
-	public virtual void OnMeleeHit( float length, float speed, float size, float rotation, string animation, bool leftHand )
-	{
-		Host.AssertClient();
-
-		if ( IsLocalPawn )
-		{
-			if ( length != -1 )
-				_ = new Sandbox.ScreenShake.Perlin( length, speed, size, rotation );
-		}
-
-		ViewModelEntity?.SetAnimParameter( animation, true );
-		CrosshairPanel?.CreateEvent( "fire" );
 	}
 }

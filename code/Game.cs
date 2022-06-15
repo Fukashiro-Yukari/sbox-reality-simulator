@@ -36,7 +36,7 @@ public class RealityGame : Game
 			ply.RespawnPoint = pawn.Transform.Position;
 	}
 
-	[ServerCmd( "spawn_entity" )]
+	[ConCmd.Server( "spawn_entity" )]
 	public static void SpawnEntity( string entName )
 	{
 		var owner = ConsoleSystem.Caller.Pawn;
@@ -44,9 +44,8 @@ public class RealityGame : Game
 		if ( owner == null )
 			return;
 
-		var attribute = Library.GetAttribute( entName );
-
-		if ( attribute == null || !attribute.Spawnable )
+		var entityType = TypeLibrary.GetTypeByName<Entity>( entName );
+		if ( entityType == null || !TypeLibrary.Has<SpawnableAttribute>( entityType ) )
 			return;
 
 		if ( owner is not RealityPlayer ply ) return;
@@ -57,7 +56,7 @@ public class RealityGame : Game
 			.Size( 2 )
 			.Run();
 
-		var ent = Library.Create<Entity>( entName );
+		var ent = TypeLibrary.Create<Entity>( entityType );
 
 		ent.Position = tr.EndPosition;
 		ent.PlaySound( "falling-3" );

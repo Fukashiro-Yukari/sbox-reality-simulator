@@ -1,8 +1,9 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "weapon_crossbow", Title = "Crossbow", Spawnable = true )]
-[Hammer.EditorModel( "weapons/rust_crossbow/rust_crossbow.vmdl" )]
+[Spawnable]
+[Library( "weapon_crossbow", Title = "Crossbow" )]
+[EditorModel( "weapons/rust_crossbow/rust_crossbow.vmdl" )]
 partial class Crossbow : WeaponSniper
 { 
 	public override string ViewModelPath => "weapons/rust_crossbow/v_rust_crossbow.vmdl";
@@ -19,10 +20,13 @@ partial class Crossbow : WeaponSniper
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1.0f,
 		Rotation = 0.5f
 	};
+	public override CType Crosshair => CType.Crossbow;
+	public override string LensTexture => null;
+	public override string ScopeTexture => null;
 
 	public override Func<Vector3, Vector3, Vector3, float, float, float, Entity> CreateEntity => CreateCrossbow;
 

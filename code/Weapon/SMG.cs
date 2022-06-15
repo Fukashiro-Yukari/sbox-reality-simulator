@@ -1,8 +1,9 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "weapon_smg", Title = "SMG", Spawnable = true )]
-[Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
+[Spawnable]
+[Library( "weapon_smg", Title = "SMG" )]
+[EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
 partial class SMG : Weapon
 { 
 	public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
@@ -11,7 +12,7 @@ partial class SMG : Weapon
 	public override int ClipSize => 30;
 	public override float PrimaryRate => 15.0f;
 	public override float SecondaryRate => 1.0f;
-	public override float ReloadTime => 2.5f;
+	public override float ReloadTime => 4.0f;
 	public override int Bucket => 0;
 	public override CType Crosshair => CType.SMG;
 	public override string Icon => "ui/weapons/weapon_smg.png";
@@ -23,7 +24,7 @@ partial class SMG : Weapon
 	public override ScreenShake ScreenShake => new ScreenShake
 	{
 		Length = 0.5f,
-		Speed = 4.0f,
+		Delay = 4.0f,
 		Size = 1.0f,
 		Rotation = 0.5f
 	};
